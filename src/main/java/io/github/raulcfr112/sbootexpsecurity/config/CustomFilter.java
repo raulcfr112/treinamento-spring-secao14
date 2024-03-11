@@ -1,5 +1,7 @@
 package io.github.raulcfr112.sbootexpsecurity.config;
 
+import io.github.raulcfr112.sbootexpsecurity.domain.security.CustomAuthentication;
+import io.github.raulcfr112.sbootexpsecurity.domain.security.IdentificacaoUsuario;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +26,13 @@ public class CustomFilter extends OncePerRequestFilter {
         String secretHeader = request.getHeader("x-secret");
         if (secretHeader != null){
             if (secretHeader.equals("secr3t")) {
-             Authentication authentication = new UsernamePasswordAuthenticationToken("Muito secret", null, List.of(new SimpleGrantedAuthority("USER")));
+                var identificacaoUser = new IdentificacaoUsuario(
+                        "id-secret",
+                        "Muito Secreto",
+                        "x-secret",
+                        List.of("USER")
+                );
+             Authentication authentication = new CustomAuthentication(identificacaoUser);
                 SecurityContext securityContext = SecurityContextHolder.getContext();
                 securityContext.setAuthentication(authentication);
             }
