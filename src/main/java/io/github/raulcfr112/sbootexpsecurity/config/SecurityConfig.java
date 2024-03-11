@@ -18,13 +18,17 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http, SenhaMasterAuthenticationProvider senhaMasterAuthenticationProvider
+    ) throws Exception{
         return http
                 .authorizeHttpRequests(customizer -> {
                     customizer.requestMatchers("/public").permitAll();
                     customizer.anyRequest().authenticated();
                 })
                 .httpBasic(Customizer.withDefaults())
+                .formLogin(Customizer.withDefaults())
+                .authenticationProvider(senhaMasterAuthenticationProvider)
                 .build();
     }
 
